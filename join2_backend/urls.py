@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from kanban_app.views import start_page_view
 from django.shortcuts import redirect
 
 def redirect_to_kanban_app(request):
@@ -24,6 +23,5 @@ def redirect_to_kanban_app(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('kanban_app/', include('tech_gadgets.urls')),
-    path('', redirect_to_kanban_app),
+    path('kanban_app/', include('kanban_app.urls')),
 ]
