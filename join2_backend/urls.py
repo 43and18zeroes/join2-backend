@@ -24,4 +24,5 @@ def redirect_to_kanban_app(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('kanban_app/', include('kanban_app.urls')),
+    path('', redirect_to_kanban_app)
 ]
