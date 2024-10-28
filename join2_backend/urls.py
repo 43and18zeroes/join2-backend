@@ -16,13 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import redirect
-
-def redirect_to_kanban_app(request):
-    return redirect('kanban_app/', permanent=True)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('kanban_app/', include('kanban_app.urls')),
-    path('', redirect_to_kanban_app)
+    path('kanban/', include('kanban_app.api.urls')),
 ]
