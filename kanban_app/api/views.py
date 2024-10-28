@@ -1,14 +1,19 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from .serializer import TaskSerializer
+from kanban_app.models import Task
 
 @api_view(['GET', 'POST'])
 def first_view(request):
     if request.method == 'GET':
-        return Response({"message": "Hello, world!"})
+        tasks = Task.objects.all()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
     if request.method == 'POST':
-        try:
-            msg = request.data['message']
-            return Response({"your_message": msg}, status=status.HTTP_201_CREATED)
-        except:
-            return Response({"message": "error"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
