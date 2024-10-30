@@ -10,9 +10,9 @@ class Task(models.Model):
     priority = models.CharField(max_length=255)
     assignedTo = models.CharField(max_length=255)
     subTasks = models.CharField(max_length=255)
-    subTasksCompleted = models.CharField(max_length=255)
+    subTasksCompleted = models.JSONField()
     taskStatus = models.CharField(max_length=255)
-    taskColumnOrder = models.CharField(max_length=255)
+    taskColumnOrder = models.IntegerField()
     firebaseId = models.CharField(max_length=255)
     
     def __str__(self):

@@ -9,9 +9,9 @@ class TaskSerializer(serializers.Serializer):
     priority = serializers.CharField(max_length=255)
     assignedTo = serializers.CharField(max_length=255)
     subTasks = serializers.CharField(max_length=255)
-    subTasksCompleted = serializers.CharField(max_length=255)
+    subTasksCompleted = serializers.JSONField()
     taskStatus = serializers.CharField(max_length=255)
-    taskColumnOrder = serializers.CharField(max_length=255)
+    taskColumnOrder = serializers.IntegerField()
     firebaseId = serializers.CharField(max_length=255)
     
     def create(self, validated_data):
