@@ -2,6 +2,7 @@ from rest_framework import serializers
 from kanban_app.models import Task
 
 class TaskSerializer(serializers.Serializer):  
+    id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(max_length=255)
     description = serializers.CharField()
     category = serializers.CharField(max_length=255)
