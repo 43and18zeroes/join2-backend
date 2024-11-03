@@ -12,7 +12,7 @@ class SubtaskSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'is_completed', 'task']
 
 class TaskSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True)  # Nested representation of users
+    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())  # Use IDs for users
     subtasks = SubtaskSerializer(many=True, read_only=True)  # Nested subtasks
     
     class Meta:
