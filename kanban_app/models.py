@@ -1,12 +1,16 @@
 from django.db import models
+from django.core.validators import RegexValidator
+
 
 class User(models.Model):
-    userSurName = models.CharField(max_length=255)
-    userFirstName = models.CharField(max_length=255)
-    userName = models.CharField(max_length=255)
-    userEmailAddress = models.CharField(max_length=255)
-    userInitials = models.CharField(max_length=255)
-    userPhoneNumber = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(
+        max_length=15,
+        validators=[RegexValidator(r'^\+?1?\d{9,15}$')],
+        help_text="Telefonnummer im Format: '+999999999'. Bis zu 15 Ziffern erlaubt."
+    )
     userColor = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
@@ -38,8 +42,7 @@ class Task(models.Model):
         ('done', 'Done'),
     ]
     status = models.CharField(max_length=20, choices=PRIORITY_CHOICES)
-    taskColumnOrder = models.IntegerField()
-    firebaseId = models.CharField(max_length=255)
+    position = models.IntegerField()
     
     def __str__(self):
         return self.title
