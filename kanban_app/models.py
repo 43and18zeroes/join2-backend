@@ -1,5 +1,12 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+
+def validate_future_date(value):
+    if value < timezone.now().date():
+        raise ValidationError("Due date must be in the future.")
+due_date = models.DateField(validators=[validate_future_date])
 
 
 class User(models.Model):
@@ -19,7 +26,7 @@ class User(models.Model):
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     
     def __str__(self):
-        return f"{self.first_name} (Subtask of {self.last_name})"
+        return f"{self.first_name} {self.last_name})"
 
 class Task(models.Model):
     title = models.CharField(max_length=255)
@@ -43,7 +50,7 @@ class Task(models.Model):
         ('await_feedback', 'Await feedback'),
         ('done', 'Done'),
     ]
-    status = models.CharField(max_length=20, choices=PRIORITY_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     position = models.IntegerField()
     
     def __str__(self):
