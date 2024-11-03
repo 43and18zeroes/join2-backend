@@ -9,9 +9,9 @@ class User(models.Model):
     phone_number = models.CharField(
         max_length=15,
         validators=[RegexValidator(r'^\+?1?\d{9,15}$')],
-        help_text="Telefonnummer im Format: '+999999999'. Bis zu 15 Ziffern erlaubt."
+        help_text="Telephone number in the format: '+999999999'. Up to 15 digits allowed."
     )
-    userColor = models.CharField(max_length=255)
+    color_hex = models.CharField(max_length=7)
     type = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
     firebaseId = models.CharField(max_length=255)
