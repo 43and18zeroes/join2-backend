@@ -1,6 +1,19 @@
 from django.db import models
 
-# Create your models here.
+class User(models.Model):
+    userSurName = models.CharField(max_length=255)
+    userFirstName = models.CharField(max_length=255)
+    userName = models.CharField(max_length=255)
+    userEmailAddress = models.CharField(max_length=255)
+    userInitials = models.CharField(max_length=255)
+    userPhoneNumber = models.CharField(max_length=255)
+    userColor = models.CharField(max_length=255)
+    type = models.CharField(max_length=255)
+    category = models.CharField(max_length=255)
+    firebaseId = models.CharField(max_length=255)
+    
+    def __str__(self):
+        return self.userName
 
 class Task(models.Model):
     title = models.CharField(max_length=255)
@@ -17,8 +30,7 @@ class Task(models.Model):
         ('urgent', 'Urgent'),
     ]
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES)
-    assignedTo = models.CharField(max_length=255)
-    subTasks = models.CharField(max_length=255)
+    users = models.ManyToManyField('User', related_name='tasks')
     subTasksCompleted = models.JSONField()
     taskStatus = models.CharField(max_length=255)
     taskColumnOrder = models.IntegerField()
@@ -27,17 +39,10 @@ class Task(models.Model):
     def __str__(self):
         return self.title
 
-class User(models.Model):
-    userSurName = models.CharField(max_length=255)
-    userFirstName = models.CharField(max_length=255)
-    userName = models.CharField(max_length=255)
-    userEmailAddress = models.CharField(max_length=255)
-    userInitials = models.CharField(max_length=255)
-    userPhoneNumber = models.CharField(max_length=255)
-    userColor = models.CharField(max_length=255)
-    type = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
-    firebaseId = models.CharField(max_length=255)
-    
+class Subtask(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='subtasks')
+    title = models.CharField(max_length=255)
+    is_completed = models.BooleanField(default=False)
+
     def __str__(self):
-        return self.userName
+        return f"{self.title} (Subtask of {self.task.title})"
