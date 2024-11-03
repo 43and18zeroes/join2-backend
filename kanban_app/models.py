@@ -31,8 +31,13 @@ class Task(models.Model):
     ]
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES)
     users = models.ManyToManyField('User', related_name='tasks')
-    subTasksCompleted = models.JSONField()
-    taskStatus = models.CharField(max_length=255)
+    STATUS_CHOICES = [
+        ('todo', 'Todo'),
+        ('in_progress', 'In progress'),
+        ('await_feedback', 'Await feedback'),
+        ('done', 'Done'),
+    ]
+    status = models.CharField(max_length=20, choices=PRIORITY_CHOICES)
     taskColumnOrder = models.IntegerField()
     firebaseId = models.CharField(max_length=255)
     
