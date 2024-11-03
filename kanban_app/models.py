@@ -5,8 +5,12 @@ from django.db import models
 class Task(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    category = models.CharField(max_length=255)
-    dueDate = models.CharField(max_length=255)
+    CATEGORY_CHOICES = [
+        ('technical_task', 'Technical Task'),
+        ('user_story', 'User Story'),
+    ]
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    due_date = models.DateField()
     priority = models.CharField(max_length=255)
     assignedTo = models.CharField(max_length=255)
     subTasks = models.CharField(max_length=255)
@@ -16,7 +20,7 @@ class Task(models.Model):
     firebaseId = models.CharField(max_length=255)
     
     def __str__(self):
-        return self.name
+        return self.title
 
 class User(models.Model):
     userSurName = models.CharField(max_length=255)
@@ -31,4 +35,4 @@ class User(models.Model):
     firebaseId = models.CharField(max_length=255)
     
     def __str__(self):
-        return self.name
+        return self.userName
