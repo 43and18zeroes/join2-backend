@@ -11,7 +11,12 @@ class Task(models.Model):
     ]
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     due_date = models.DateField()
-    priority = models.CharField(max_length=255)
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('urgent', 'Urgent'),
+    ]
+    priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES)
     assignedTo = models.CharField(max_length=255)
     subTasks = models.CharField(max_length=255)
     subTasksCompleted = models.JSONField()
