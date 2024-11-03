@@ -11,13 +11,15 @@ class User(models.Model):
         validators=[RegexValidator(r'^\+?1?\d{9,15}$')],
         help_text="Telephone number in the format: '+999999999'. Up to 15 digits allowed."
     )
-    color_hex = models.CharField(max_length=7)
-    type = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
-    firebaseId = models.CharField(max_length=255)
+    user_color = models.CharField(max_length=7)
+    TYPE_CHOICES = [
+        ('user_from_signup', 'User from signup'),
+        ('user_from_contacts', 'User from contacts'),
+    ]
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     
     def __str__(self):
-        return self.userName
+        return f"{self.first_name} (Subtask of {self.last_name})"
 
 class Task(models.Model):
     title = models.CharField(max_length=255)
