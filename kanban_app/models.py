@@ -41,7 +41,7 @@ class User(models.Model):
 
 class Task(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     CATEGORY_CHOICES = [
         ('Technical Task', 'Technical Task'),
         ('User Story', 'User Story'),
