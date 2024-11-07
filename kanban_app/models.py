@@ -43,8 +43,8 @@ class Task(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     CATEGORY_CHOICES = [
-        ('technical_task', 'Technical Task'),
-        ('user_story', 'User Story'),
+        ('Technical Task', 'Technical Task'),
+        ('User Story', 'User Story'),
     ]
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     due_date = models.DateField()
