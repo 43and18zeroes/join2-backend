@@ -15,7 +15,7 @@ class User(models.Model):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(
         max_length=15,
-        help_text="Telephone number in the format: '+999999999'. Up to 15 digits allowed."
+        help_text="Telephone number in the format: '999999999'. Up to 15 digits allowed."
     )
     # phone_number = models.CharField(
     #     max_length=15,
