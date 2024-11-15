@@ -10,7 +10,7 @@ class SubtaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subtask
         fields = ['id', 'title', 'is_completed', 'task']
-        
+
 class TaskReadSerializer(serializers.ModelSerializer):
     users = UserSerializer(many=True, read_only=True)  # Embed user details
     subtasks = SubtaskSerializer(many=True, read_only=True)  # Nested subtasks
@@ -25,32 +25,52 @@ class TaskReadSerializer(serializers.ModelSerializer):
     
     def get_category_choices(self, obj):
         return Task.CATEGORY_CHOICES
-    
-    
+
 class TaskWriteSerializer(serializers.ModelSerializer):
-    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    users = UserSerializer(many=True)
+    subtasks = SubtaskSerializer(many=True)
     
     class Meta:
         model = Task
         fields = [
             'id', 'title', 'description', 'category', 'due_date', 'priority', 
-            'users', 'status', 'position'
+            'users', 'status', 'position', 'subtasks'
         ]
     
     def create(self, validated_data):
         users_data = validated_data.pop('users')
+        subtasks_data = validated_data.pop('subtasks')
+        
+        # Erstelle die Task-Instanz
         task = Task.objects.create(**validated_data)
+        
+        # Erstelle die User-Instanzen und füge sie der Task hinzu
         for user_data in users_data:
-            user, created = User.objects.get_or_create(id=user_data.id)
+            user, created = User.objects.get_or_create(**user_data)
             task.users.add(user)
+        
+        # Erstelle die Subtask-Instanzen und füge sie der Task hinzu
+        for subtask_data in subtasks_data:
+            Subtask.objects.create(task=task, **subtask_data)
+        
         return task
 
     def update(self, instance, validated_data):
         users_data = validated_data.pop('users', None)
+        subtasks_data = validated_data.pop('subtasks', None)
+        
+        # Aktualisiere die Task-Instanz
+        instance = super().update(instance, validated_data)
+        
         if users_data:
             instance.users.clear()
             for user_data in users_data:
-                user, created = User.objects.get_or_create(id=user_data.id)
+                user, created = User.objects.get_or_create(**user_data)
                 instance.users.add(user)
         
-        return super().update(instance, validated_data)
+        if subtasks_data:
+            instance.subtasks.all().delete()
+            for subtask_data in subtasks_data:
+                Subtask.objects.create(task=instance, **subtask_data)
+        
+        return instance
