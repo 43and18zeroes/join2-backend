@@ -17,11 +17,6 @@ class User(models.Model):
         max_length=15,
         help_text="Telephone number in the format: '999999999'. Up to 15 digits allowed."
     )
-    # phone_number = models.CharField(
-    #     max_length=15,
-    #     validators=[RegexValidator(r'^\+?1?\d{9,15}$')],
-    #     help_text="Telephone number in the format: '+999999999'. Up to 15 digits allowed."
-    # )
     user_color = models.CharField(max_length=7)
     TYPE_CHOICES = [
         ('user_from_signup', 'User from signup'),
@@ -34,7 +29,6 @@ class User(models.Model):
         return f"{self.first_name} {self.last_name}"
 
     def save(self, *args, **kwargs):
-        # Calculate initials from first_name and last_name
         if self.first_name and self.last_name:
             self.initials = f"{self.first_name[0]}{self.last_name[0]}".upper()
         super().save(*args, **kwargs)
