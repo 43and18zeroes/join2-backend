@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 class SubtaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subtask
-        fields = ['id', 'title', 'is_completed', 'task']
+        fields = ['id', 'title', 'is_completed']
 
 class TaskReadSerializer(serializers.ModelSerializer):
     users = UserSerializer(many=True, read_only=True)  # Embed user details
@@ -41,15 +41,15 @@ class TaskWriteSerializer(serializers.ModelSerializer):
         users_data = validated_data.pop('users')
         subtasks_data = validated_data.pop('subtasks')
         
-        # Erstelle die Task-Instanz
+        # Create the Task instance
         task = Task.objects.create(**validated_data)
         
-        # Erstelle die User-Instanzen und füge sie der Task hinzu
+        # Create the User instances and add them to the Task
         for user_data in users_data:
             user, created = User.objects.get_or_create(**user_data)
             task.users.add(user)
         
-        # Erstelle die Subtask-Instanzen und füge sie der Task hinzu
+        # Create the Subtask instances and add them to the Task
         for subtask_data in subtasks_data:
             Subtask.objects.create(task=task, **subtask_data)
         
@@ -59,7 +59,7 @@ class TaskWriteSerializer(serializers.ModelSerializer):
         users_data = validated_data.pop('users', None)
         subtasks_data = validated_data.pop('subtasks', None)
         
-        # Aktualisiere die Task-Instanz
+        # Update the Task instance
         instance = super().update(instance, validated_data)
         
         if users_data:
