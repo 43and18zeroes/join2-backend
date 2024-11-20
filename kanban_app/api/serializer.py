@@ -38,6 +38,7 @@ class TaskWriteSerializer(serializers.ModelSerializer):
         ]
     
     def create(self, validated_data):
+        print("Validated data received in serializer:", validated_data)  # Debug
         users_data = validated_data.pop('users')
         subtasks_data = validated_data.pop('subtasks')
         
