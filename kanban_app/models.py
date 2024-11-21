@@ -12,7 +12,7 @@ due_date = models.DateField(validators=[validate_future_date])
 class User(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, blank=True, null=True)
     phone_number = models.CharField(
         max_length=15,
         help_text="Telephone number in the format: '999999999'. Up to 15 digits allowed."

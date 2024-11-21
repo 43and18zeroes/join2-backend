@@ -5,6 +5,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'user_color', 'type', 'initials']
+        extra_kwargs = {
+            'email': {'required': False}  # E-Mail ist optional
+        }
 
 class SubtaskSerializer(serializers.ModelSerializer):
     class Meta:
