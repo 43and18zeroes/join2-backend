@@ -56,7 +56,8 @@ class Task(models.Model):
         ('done', 'Done'),
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    position = models.IntegerField(default=1)
+    # position = models.IntegerField(default=1)
+    position = models.IntegerField()
     
     def __str__(self):
         return self.title
