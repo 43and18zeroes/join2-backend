@@ -20,11 +20,10 @@ class TaskViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['post'])
     def update_positions(self, request):
-        """Batch-Update für die Positionen von Tasks."""
-        updates = request.data  # Erwartet ein Array von {id, position}
+        updates = request.data  # Erwartet ein Array von {id, position, status}
         if not isinstance(updates, list):
             return Response(
-                {"error": "Payload must be a list of {id, position} objects."},
+                {"error": "Payload must be a list of {id, position, status} objects."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -32,6 +31,7 @@ class TaskViewSet(viewsets.ModelViewSet):
             try:
                 task = Task.objects.get(id=update.get('id'))
                 task.position = update.get('position')
+                task.status = update.get('status')  # Aktualisiere den Status
                 task.save()
             except Task.DoesNotExist:
                 return Response(
@@ -39,7 +39,7 @@ class TaskViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
-        return Response({"success": "Positions updated successfully."}, status=status.HTTP_200_OK)
+        return Response({"success": "Tasks updated successfully."}, status=status.HTTP_200_OK)
 
 # class TaskViewSet(viewsets.ModelViewSet):
 #     queryset = Task.objects.all()
