@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'user_color', 'type', 'initials']
         extra_kwargs = {
-            'email': {'required': False}  # E-Mail ist optional
+            'email': {'required': False}
         }
 
 class SubtaskSerializer(serializers.ModelSerializer):
@@ -15,8 +15,8 @@ class SubtaskSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'is_completed']
 
 class TaskReadSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True, read_only=True)  # Embed user details
-    subtasks = SubtaskSerializer(many=True, read_only=True)  # Nested subtasks
+    users = UserSerializer(many=True, read_only=True)
+    subtasks = SubtaskSerializer(many=True, read_only=True)
     category_choices = serializers.SerializerMethodField()
     
     class Meta:
@@ -41,19 +41,15 @@ class TaskWriteSerializer(serializers.ModelSerializer):
         ]
     
     def create(self, validated_data):
-        print("Validated data received in serializer:", validated_data)  # Debug
+        print("Validated data received in serializer:", validated_data)
         users_data = validated_data.pop('users')
         subtasks_data = validated_data.pop('subtasks')
-        
-        # Create the Task instance
         task = Task.objects.create(**validated_data)
         
-        # Create the User instances and add them to the Task
         for user_data in users_data:
             user, created = User.objects.get_or_create(**user_data)
             task.users.add(user)
         
-        # Create the Subtask instances and add them to the Task
         for subtask_data in subtasks_data:
             Subtask.objects.create(task=task, **subtask_data)
         
@@ -62,8 +58,6 @@ class TaskWriteSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         users_data = validated_data.pop('users', None)
         subtasks_data = validated_data.pop('subtasks', None)
-        
-        # Update the Task instance
         instance = super().update(instance, validated_data)
         
         if users_data:

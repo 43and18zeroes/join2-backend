@@ -20,7 +20,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['post'])
     def update_positions(self, request):
-        updates = request.data  # Erwartet ein Array von {id, position, status}
+        updates = request.data
         if not isinstance(updates, list):
             return Response(
                 {"error": "Payload must be a list of {id, position, status} objects."},
@@ -31,7 +31,7 @@ class TaskViewSet(viewsets.ModelViewSet):
             try:
                 task = Task.objects.get(id=update.get('id'))
                 task.position = update.get('position')
-                task.status = update.get('status')  # Aktualisiere den Status
+                task.status = update.get('status')
                 task.save()
             except Task.DoesNotExist:
                 return Response(
@@ -40,10 +40,6 @@ class TaskViewSet(viewsets.ModelViewSet):
                 )
 
         return Response({"success": "Tasks updated successfully."}, status=status.HTTP_200_OK)
-
-# class TaskViewSet(viewsets.ModelViewSet):
-#     queryset = Task.objects.all()
-#     serializer_class = TaskSerializer
 
 class SubtaskViewSet(viewsets.ModelViewSet):
     queryset = Subtask.objects.all()
