@@ -66,8 +66,8 @@ class TaskWriteSerializer(serializers.ModelSerializer):
                 user, created = User.objects.get_or_create(**user_data)
                 instance.users.add(user)
         
+        instance.subtasks.all().delete()
         if subtasks_data:
-            instance.subtasks.all().delete()
             for subtask_data in subtasks_data:
                 Subtask.objects.create(task=instance, **subtask_data)
         
