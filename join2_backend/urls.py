@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('kanban/', include('kanban_app.api.urls')),
+    path('auth/', include('user_auth_app.api.urls')),
 ]
