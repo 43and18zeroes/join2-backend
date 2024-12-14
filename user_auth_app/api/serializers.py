@@ -1,6 +1,6 @@
 # from user_auth_app.models import UserProfile
 from rest_framework import serializers
-from kanban_app.models import User
+from user_auth_app.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
