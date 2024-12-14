@@ -4,10 +4,10 @@
 
 from rest_framework import viewsets
 from .serializers import UserSerializer
-from user_auth_app.models import User
+from user_auth_app.models import UserProfile
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
 
 # class UserProfileList(generics.ListCreateAPIView):

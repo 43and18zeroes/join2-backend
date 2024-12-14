@@ -8,7 +8,7 @@
 
 from django.db import models
 
-class User(models.Model):
+class UserProfile(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     email = models.EmailField(unique=True, blank=True, null=True)
