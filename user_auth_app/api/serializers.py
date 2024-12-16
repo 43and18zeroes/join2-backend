@@ -1,4 +1,3 @@
-# from user_auth_app.models import UserProfile
 from rest_framework import serializers
 from user_auth_app.models import UserProfile
 from django.contrib.auth.models import User
@@ -24,15 +23,18 @@ class RegistrationSerializer(serializers.ModelSerializer):
         }
 
     def save(self):
+        email = self.validated_data['email']
+        username = email.replace('@', '').replace('.', '')
+        
         user = User(
+            username=username,
             first_name=self.validated_data['first_name'],
             last_name=self.validated_data['last_name'],
-            email=self.validated_data['email'],
+            email=email
         )
         user.set_password(self.validated_data['password'])
         user.save()
 
-        # Create a UserProfile for the user
         UserProfile.objects.create(
             user=user,
             phone_number=self.validated_data.get('phone_number', ''),
@@ -41,8 +43,3 @@ class RegistrationSerializer(serializers.ModelSerializer):
         )
 
         return user
-
-# class UserProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserProfile
-#         fields = ['user', 'bio', 'location']
