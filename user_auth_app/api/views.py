@@ -53,8 +53,8 @@ class CustomLoginView(ObtainAuthToken):
             token, created = Token.objects.get_or_create(user=user)
             data = {
                 'token': token.key,
-                'username': token.username,
-                'email': token.email
+                'username': user.username,
+                'email': user.email
             }
         else:
             data=serializer.errors
