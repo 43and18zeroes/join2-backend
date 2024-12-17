@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from user_auth_app.models import UserProfile
-from .serializers import UserProfileSerializer, RegistrationSerializer
+from .serializers import UserProfileSerializer, RegistrationSerializer, SimpleEmailLoginSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
@@ -40,23 +40,40 @@ class RegistrationView(APIView):
             data=serializer.errors
             
         return Response(data)
-    
-class CustomLoginView(ObtainAuthToken):
+
+class SimpleLoginView(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
+        serializer = SimpleEmailLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+
+        return Response({
+            'token': token.key,
+            'email': user.email,
+            'username': user.username,
+        })
+
+    
+# class CustomLoginView(ObtainAuthToken):
+#     permission_classes = [AllowAny]
+    
+#     def post(self, request):
+#         serializer = self.serializer_class(data=request.data)
         
-        data = {}
-        if serializer.is_valid():
-            user = serializer.validated_data['user']
-            token, created = Token.objects.get_or_create(user=user)
-            data = {
-                'token': token.key,
-                'username': user.username,
-                'email': user.email
-            }
-        else:
-            data=serializer.errors
+#         data = {}
+#         if serializer.is_valid():
+#             user = serializer.validated_data['user']
+#             token, created = Token.objects.get_or_create(user=user)
+#             data = {
+#                 'token': token.key,
+#                 'username': user.username,
+#                 'email': user.email
+#             }
+#         else:
+#             data=serializer.errors
             
-        return Response(data)
+#         return Response(data)

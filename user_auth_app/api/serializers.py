@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from user_auth_app.models import UserProfile
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -43,3 +44,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
         )
 
         return user
+    
+class SimpleEmailLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+
+    def validate(self, data):
+        email = data.get('email')
+        username = email.replace('@', '').replace('.', '')
+        password = data.get('password')
+        
+        user = authenticate(username=username, password=password)
+        if not user:
+            raise serializers.ValidationError("Ungültige E-Mail oder Passwort.")
+        
+        data['user'] = user
+        return data
