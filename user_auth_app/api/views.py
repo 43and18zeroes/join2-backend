@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from user_auth_app.models import UserProfile
 from .serializers import UserProfileSerializer, RegistrationSerializer, SimpleEmailLoginSerializer
 
@@ -56,6 +57,17 @@ class SimpleLoginView(APIView):
             'email': user.email,
             'username': user.username,
         })
+        
+
+class CurrentUserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user_profile = UserProfile.objects.get(user=request.user)
+        serializer = UserProfileSerializer(user_profile)
+        return Response(serializer.data)
+
+
 
     
 # class CustomLoginView(ObtainAuthToken):
