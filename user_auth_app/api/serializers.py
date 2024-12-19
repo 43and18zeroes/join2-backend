@@ -51,8 +51,9 @@ class SimpleEmailLoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
 
     def validate(self, data):
-        email = data.get('email')
-        username = email.replace('@', '').replace('.', '')
+        # email = data.get('email')
+        # username = email.replace('@', '').replace('.', '')
+        username = data.get('email')
         password = data.get('password')
         
         user = authenticate(username=username, password=password)
