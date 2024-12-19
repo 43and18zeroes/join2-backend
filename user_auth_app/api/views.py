@@ -58,20 +58,9 @@ class SimpleLoginView(APIView):
             'username': user.username,
         })
         
-
-class CurrentUserProfileView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        user_profile = UserProfile.objects.get(user=request.user)
-        serializer = UserProfileSerializer(user_profile)
-        return Response(serializer.data)
-
-
-
-    
 class CustomLoginView(ObtainAuthToken):
     permission_classes = [AllowAny]
+    print(f"print test")
     
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -79,6 +68,7 @@ class CustomLoginView(ObtainAuthToken):
         data = {}
         if serializer.is_valid():
             user = serializer.validated_data['user']
+            print(f"DEBUG: User - {user}")
             token, created = Token.objects.get_or_create(user=user)
             data = {
                 'token': token.key,
@@ -88,4 +78,12 @@ class CustomLoginView(ObtainAuthToken):
         else:
             data=serializer.errors
             
-        return Response(data)
+        return Response(data)        
+
+class CurrentUserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user_profile = UserProfile.objects.get(user=request.user)
+        serializer = UserProfileSerializer(user_profile)
+        return Response(serializer.data)
