@@ -24,14 +24,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
         }
 
     def save(self):
-        email = self.validated_data['email']
-        username = email.replace('@', '').replace('.', '')
+        # email = self.validated_data['email']
+        # username = email.replace('@', '').replace('.', '')
         
         user = User(
-            username=username,
+            username=self.validated_data['email'],
+            # username=username,
             first_name=self.validated_data['first_name'],
             last_name=self.validated_data['last_name'],
-            email=email
+            # email=email
         )
         user.set_password(self.validated_data['password'])
         user.save()

@@ -42,21 +42,21 @@ class RegistrationView(APIView):
             
         return Response(data)
 
-class SimpleLoginView(APIView):
-    permission_classes = [AllowAny]
+# class SimpleLoginView(APIView):
+#     permission_classes = [AllowAny]
 
-    def post(self, request):
-        serializer = SimpleEmailLoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+#     def post(self, request):
+#         serializer = SimpleEmailLoginSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
 
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
+#         user = serializer.validated_data['user']
+#         token, created = Token.objects.get_or_create(user=user)
 
-        return Response({
-            'token': token.key,
-            'email': user.email,
-            'username': user.username,
-        })
+#         return Response({
+#             'token': token.key,
+#             'email': user.email,
+#             'username': user.username,
+#         })
         
 
 class CurrentUserProfileView(APIView):
@@ -70,22 +70,22 @@ class CurrentUserProfileView(APIView):
 
 
     
-# class CustomLoginView(ObtainAuthToken):
-#     permission_classes = [AllowAny]
+class CustomLoginView(ObtainAuthToken):
+    permission_classes = [AllowAny]
     
-#     def post(self, request):
-#         serializer = self.serializer_class(data=request.data)
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
         
-#         data = {}
-#         if serializer.is_valid():
-#             user = serializer.validated_data['user']
-#             token, created = Token.objects.get_or_create(user=user)
-#             data = {
-#                 'token': token.key,
-#                 'username': user.username,
-#                 'email': user.email
-#             }
-#         else:
-#             data=serializer.errors
+        data = {}
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            token, created = Token.objects.get_or_create(user=user)
+            data = {
+                'token': token.key,
+                'username': user.username,
+                'email': user.email
+            }
+        else:
+            data=serializer.errors
             
-#         return Response(data)
+        return Response(data)
