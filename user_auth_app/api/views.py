@@ -73,7 +73,7 @@ class CustomLoginView(ObtainAuthToken):
             data = {
                 'token': token.key,
                 'username': user.username,
-                'email': user.email
+                # 'email': user.email
             }
         else:
             data=serializer.errors
