@@ -46,6 +46,22 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         return user
     
+
+class CustomLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+    
+    def validate(self, data):
+        username = data.get('email')
+        password = data.get('password')
+        
+        user = authenticate(username=username, password=password)
+        if not user:
+            raise serializers.ValidationError("Ungültige E-Mail oder Passwort.")
+        
+        data['user'] = user
+        return data
+    
 class SimpleEmailLoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})

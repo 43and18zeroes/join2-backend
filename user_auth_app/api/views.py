@@ -8,7 +8,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from user_auth_app.models import UserProfile
-from .serializers import UserProfileSerializer, RegistrationSerializer, SimpleEmailLoginSerializer
+from .serializers import UserProfileSerializer, RegistrationSerializer, SimpleEmailLoginSerializer, CustomLoginSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
@@ -63,7 +63,8 @@ class CustomLoginView(ObtainAuthToken):
     print(f"print test")
     
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
+        serializer = CustomLoginSerializer(data=request.data)
+        # serializer = self.serializer_class(data=request.data)
         
         data = {}
         if serializer.is_valid():
