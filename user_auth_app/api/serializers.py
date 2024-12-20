@@ -24,15 +24,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
         }
 
     def save(self):
-        # email = self.validated_data['email']
-        # username = email.replace('@', '').replace('.', '')
         
         user = User(
             username=self.validated_data['email'],
-            # username=username,
             first_name=self.validated_data['first_name'],
             last_name=self.validated_data['last_name'],
-            # email=email
         )
         user.set_password(self.validated_data['password'])
         user.save()
@@ -62,19 +58,19 @@ class CustomLoginSerializer(serializers.Serializer):
         data['user'] = user
         return data
     
-class SimpleEmailLoginSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+# class SimpleEmailLoginSerializer(serializers.Serializer):
+#     email = serializers.EmailField(required=True)
+#     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
 
-    def validate(self, data):
-        # email = data.get('email')
-        # username = email.replace('@', '').replace('.', '')
-        username = data.get('email')
-        password = data.get('password')
+#     def validate(self, data):
+#         # email = data.get('email')
+#         # username = email.replace('@', '').replace('.', '')
+#         username = data.get('email')
+#         password = data.get('password')
         
-        user = authenticate(username=username, password=password)
-        if not user:
-            raise serializers.ValidationError("Ungültige E-Mail oder Passwort.")
+#         user = authenticate(username=username, password=password)
+#         if not user:
+#             raise serializers.ValidationError("Ungültige E-Mail oder Passwort.")
         
-        data['user'] = user
-        return data
+#         data['user'] = user
+#         return data
