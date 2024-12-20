@@ -1,5 +1,3 @@
-# from .serializers import UserSerializer
-# from user_auth_app.models import UserProfile
 from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
@@ -41,30 +39,13 @@ class RegistrationView(APIView):
             data=serializer.errors
             
         return Response(data)
-
-class SimpleLoginView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        serializer = SimpleEmailLoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-
-        return Response({
-            'token': token.key,
-            'email': user.email,
-            'username': user.username,
-        })
-        
+ 
 class CustomLoginView(ObtainAuthToken):
     permission_classes = [AllowAny]
     print(f"print test")
     
     def post(self, request):
         serializer = CustomLoginSerializer(data=request.data)
-        # serializer = self.serializer_class(data=request.data)
         
         data = {}
         if serializer.is_valid():
