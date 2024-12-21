@@ -51,12 +51,41 @@ class CustomLoginSerializer(serializers.Serializer):
         username = data.get('email')
         password = data.get('password')
         
+        # Sonderprüfung für gast@gast.de und 123456
+        if username == 'gast@gast.de' and password == '123456':
+            user, created = User.objects.get_or_create(
+                username=username,
+                defaults={
+                    'first_name': 'Gast',
+                    'last_name': 'Benutzer',
+                }
+            )
+            if created:
+                user.set_password(password)
+                user.save()
+
+                # UserProfile anlegen
+                UserProfile.objects.get_or_create(
+                    user=user,
+                    defaults={
+                        'first_name': 'Gast',
+                        'last_name': 'Benutzer',
+                        'type': 'user_from_signup',
+                        'user_color': '#000000',
+                    }
+                )
+
+            # Authentifizierung fortsetzen
+            user = authenticate(username=username, password=password)
+
+        # Normale Authentifizierung
         user = authenticate(username=username, password=password)
         if not user:
             raise serializers.ValidationError("Ungültige E-Mail oder Passwort.")
         
         data['user'] = user
         return data
+
     
 # class SimpleEmailLoginSerializer(serializers.Serializer):
 #     email = serializers.EmailField(required=True)
