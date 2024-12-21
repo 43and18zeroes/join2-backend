@@ -35,6 +35,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         UserProfile.objects.create(
             user=user,
+            first_name=self.validated_data['first_name'],
+            last_name=self.validated_data['last_name'],
             phone_number=self.validated_data.get('phone_number', ''),
             user_color=self.validated_data.get('user_color', ''),
             type=self.validated_data.get('type', 'user_from_signup')
