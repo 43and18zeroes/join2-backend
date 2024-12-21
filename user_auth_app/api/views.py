@@ -42,7 +42,6 @@ class RegistrationView(APIView):
  
 class CustomLoginView(ObtainAuthToken):
     permission_classes = [AllowAny]
-    print(f"print test")
     
     def post(self, request):
         serializer = CustomLoginSerializer(data=request.data)
@@ -50,7 +49,6 @@ class CustomLoginView(ObtainAuthToken):
         data = {}
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            print(f"DEBUG: User - {user}")
             token, created = Token.objects.get_or_create(user=user)
             data = {
                 'token': token.key,
