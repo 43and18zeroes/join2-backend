@@ -56,8 +56,8 @@ class CustomLoginSerializer(serializers.Serializer):
             user, created = User.objects.get_or_create(
                 username=username,
                 defaults={
-                    'first_name': 'Gast',
-                    'last_name': 'Benutzer',
+                    'first_name': 'Guest',
+                    'last_name': 'User',
                 }
             )
             if created:
@@ -68,8 +68,8 @@ class CustomLoginSerializer(serializers.Serializer):
                 UserProfile.objects.get_or_create(
                     user=user,
                     defaults={
-                        'first_name': 'Gast',
-                        'last_name': 'Benutzer',
+                        # 'first_name': 'Guest',
+                        # 'last_name': 'User',
                         'type': 'user_from_signup',
                         'user_color': '#000000',
                     }
