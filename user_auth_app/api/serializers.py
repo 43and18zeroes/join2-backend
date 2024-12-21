@@ -68,10 +68,10 @@ class CustomLoginSerializer(serializers.Serializer):
                 UserProfile.objects.get_or_create(
                     user=user,
                     defaults={
-                        # 'first_name': 'Guest',
-                        # 'last_name': 'User',
+                        'first_name': 'Guest',
+                        'last_name': 'User',
                         'type': 'user_from_signup',
-                        'user_color': '#000000',
+                        'user_color': '#66EB90',
                     }
                 )
 
