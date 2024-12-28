@@ -89,7 +89,7 @@ class CustomLoginSerializer(serializers.Serializer):
         return data
 
 
-class UserCreationSerializer(serializers.ModelSerializer):
+class ContactCreationSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(write_only=True, required=False, allow_blank=True)
     user_color = serializers.CharField(write_only=True, required=False)
     type = serializers.ChoiceField(choices=UserProfile.TYPE_CHOICES, write_only=True, required=False)

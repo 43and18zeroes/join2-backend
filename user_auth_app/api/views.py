@@ -6,7 +6,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from user_auth_app.models import UserProfile
-from .serializers import UserProfileSerializer, RegistrationSerializer, CustomLoginSerializer, UserCreationSerializer
+from .serializers import UserProfileSerializer, RegistrationSerializer, CustomLoginSerializer, ContactCreationSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
@@ -70,4 +70,4 @@ class CurrentUserProfileView(APIView):
     
 class UserViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
-    serializer_class = UserCreationSerializer
+    serializer_class = ContactCreationSerializer

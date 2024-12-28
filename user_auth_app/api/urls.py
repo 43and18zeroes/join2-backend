@@ -8,7 +8,7 @@ urlpatterns = [
     path('registration/', views.RegistrationView.as_view(), name='registration'),
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('current-user/', views.CurrentUserProfileView.as_view(), name='current-user'),
-    path('create-user/', views.UserViewSet.as_view({'post': 'create'}), name='create-user')
+    path('create-contact/', views.UserViewSet.as_view({'post': 'create'}), name='create-contact')
 ]
 
 
