@@ -88,20 +88,40 @@ class CustomLoginSerializer(serializers.Serializer):
         data['user'] = user
         return data
 
-    
-# class SimpleEmailLoginSerializer(serializers.Serializer):
-#     email = serializers.EmailField(required=True)
-#     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
 
-#     def validate(self, data):
-#         # email = data.get('email')
-#         # username = email.replace('@', '').replace('.', '')
-#         username = data.get('email')
-#         password = data.get('password')
+class UserCreationSerializer(serializers.ModelSerializer):
+    phone_number = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    user_color = serializers.CharField(write_only=True, required=False)
+    type = serializers.ChoiceField(choices=UserProfile.TYPE_CHOICES, write_only=True, required=False)
+
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'user_color', 'type']
+
+    def save(self):
         
-#         user = authenticate(username=username, password=password)
-#         if not user:
-#             raise serializers.ValidationError("Ungültige E-Mail oder Passwort.")
-        
-#         data['user'] = user
-#         return data
+        user = User(
+            username=self.validated_data['email'],
+            first_name=self.validated_data['first_name'],
+            last_name=self.validated_data['last_name'],
+        )
+        user.save()
+
+        UserProfile.objects.create(
+            user=user,
+            first_name=self.validated_data['first_name'],
+            last_name=self.validated_data['last_name'],
+            phone_number=self.validated_data.get('phone_number', ''),
+            user_color=self.validated_data.get('user_color', ''),
+            type=self.validated_data.get('type', 'user_from_contactbook')
+        )
+
+        return user
+    
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'user_color', 'type', 'initials']
+#         extra_kwargs = {
+#             'email': {'required': False}
+#         }
