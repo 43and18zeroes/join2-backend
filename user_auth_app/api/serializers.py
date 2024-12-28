@@ -95,19 +95,17 @@ class ContactCreationSerializer(serializers.ModelSerializer):
     type = serializers.ChoiceField(choices=UserProfile.TYPE_CHOICES, write_only=True, required=False)
 
     class Meta:
-        model = User
+        model = UserProfile  # oder User, falls User primär ist
         fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'user_color', 'type']
 
     def save(self):
-        
-        user = User(
+        user = User.objects.create(
             username=self.validated_data['email'],
             first_name=self.validated_data['first_name'],
-            last_name=self.validated_data['last_name'],
+            last_name=self.validated_data['last_name']
         )
-        user.save()
 
-        UserProfile.objects.create(
+        user_profile = UserProfile.objects.create(
             user=user,
             first_name=self.validated_data['first_name'],
             last_name=self.validated_data['last_name'],
@@ -116,7 +114,8 @@ class ContactCreationSerializer(serializers.ModelSerializer):
             type=self.validated_data.get('type', 'user_from_contactbook')
         )
 
-        return user
+        return user_profile  # Das Objekt zurückgeben, damit die ID enthalten ist
+
     
 # class UserSerializer(serializers.ModelSerializer):
 #     class Meta:

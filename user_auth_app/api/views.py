@@ -71,3 +71,10 @@ class CurrentUserProfileView(APIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = ContactCreationSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()  # Speichert das Objekt und gibt es zurück
+        headers = self.get_success_headers(serializer.data)
+        return Response(self.get_serializer(instance).data, status=201, headers=headers)
