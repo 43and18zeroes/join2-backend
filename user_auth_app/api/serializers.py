@@ -35,6 +35,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         UserProfile.objects.create(
             user=user,
+            email=self.validated_data['email'],
             first_name=self.validated_data['first_name'],
             last_name=self.validated_data['last_name'],
             phone_number=self.validated_data.get('phone_number', ''),
@@ -107,6 +108,7 @@ class ContactCreationSerializer(serializers.ModelSerializer):
 
         user_profile = UserProfile.objects.create(
             user=user,
+            email=self.validated_data['email'],
             first_name=self.validated_data['first_name'],
             last_name=self.validated_data['last_name'],
             phone_number=self.validated_data.get('phone_number', ''),
