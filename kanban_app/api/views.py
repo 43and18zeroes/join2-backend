@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from kanban_app.models import User, Task, Subtask
+from kanban_app.models import UserProfile, Task, Subtask
 from .serializer import UserSerializer, TaskWriteSerializer, TaskReadSerializer, SubtaskSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -7,7 +7,7 @@ from rest_framework import status
 from kanban_app.models import Task
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
     
 class TaskViewSet(viewsets.ModelViewSet):

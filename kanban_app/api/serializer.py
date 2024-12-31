@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from kanban_app.models import User, Task, Subtask
+from kanban_app.models import UserProfile, Task, Subtask
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = UserProfile
         fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'user_color', 'type', 'initials']
         extra_kwargs = {
             'email': {'required': False}
@@ -47,7 +47,7 @@ class TaskWriteSerializer(serializers.ModelSerializer):
         task = Task.objects.create(**validated_data)
         
         for user_data in users_data:
-            user, created = User.objects.get_or_create(**user_data)
+            user, created = UserProfile.objects.get_or_create(**user_data)
             task.users.add(user)
         
         for subtask_data in subtasks_data:
@@ -63,7 +63,7 @@ class TaskWriteSerializer(serializers.ModelSerializer):
         if users_data:
             instance.users.clear()
             for user_data in users_data:
-                user, created = User.objects.get_or_create(**user_data)
+                user, created = UserProfile.objects.get_or_create(**user_data)
                 instance.users.add(user)
         
         instance.subtasks.all().delete()
