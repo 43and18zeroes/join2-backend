@@ -71,6 +71,7 @@ class CustomLoginSerializer(serializers.Serializer):
                 UserProfile.objects.get_or_create(
                     user=user,
                     defaults={
+                        'email': 'guest@example.com',
                         'first_name': 'Guest',
                         'last_name': 'User',
                         'type': 'user_from_signup',
