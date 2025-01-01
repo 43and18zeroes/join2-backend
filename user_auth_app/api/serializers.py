@@ -55,7 +55,7 @@ class CustomLoginSerializer(serializers.Serializer):
         password = data.get('password')
         
         # Sonderprüfung für gast@gast.de und 123456
-        if username == 'gast@gast.de' and password == '123456':
+        if username == 'guest@example.com' and password == '123456':
             user, created = User.objects.get_or_create(
                 username=username,
                 defaults={
