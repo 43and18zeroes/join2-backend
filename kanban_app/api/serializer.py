@@ -60,11 +60,11 @@ class TaskWriteSerializer(serializers.ModelSerializer):
         subtasks_data = validated_data.pop('subtasks', None)
         instance = super().update(instance, validated_data)
         
-        if users_data:
-            instance.users.clear()
-            for user_data in users_data:
-                user, created = UserProfile.objects.get_or_create(**user_data)
-                instance.users.add(user)
+
+        instance.users.clear()
+        for user_data in users_data:
+            user, created = UserProfile.objects.get_or_create(**user_data)
+            instance.users.add(user)
         
         instance.subtasks.all().delete()
         if subtasks_data:
