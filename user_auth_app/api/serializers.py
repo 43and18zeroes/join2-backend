@@ -54,7 +54,6 @@ class CustomLoginSerializer(serializers.Serializer):
         username = data.get('email')
         password = data.get('password')
         
-        # Sonderprüfung für gast@gast.de und 123456
         if username == 'guest@example.com' and password == '123456':
             user, created = User.objects.get_or_create(
                 username=username,
@@ -67,7 +66,6 @@ class CustomLoginSerializer(serializers.Serializer):
                 user.set_password(password)
                 user.save()
 
-                # UserProfile anlegen
                 UserProfile.objects.get_or_create(
                     user=user,
                     defaults={
@@ -79,10 +77,8 @@ class CustomLoginSerializer(serializers.Serializer):
                     }
                 )
 
-            # Authentifizierung fortsetzen
             user = authenticate(username=username, password=password)
 
-        # Normale Authentifizierung
         user = authenticate(username=username, password=password)
         if not user:
             raise serializers.ValidationError("Ungültige E-Mail oder Passwort.")
@@ -97,7 +93,7 @@ class ContactCreationSerializer(serializers.ModelSerializer):
     type = serializers.ChoiceField(choices=UserProfile.TYPE_CHOICES, write_only=True, required=False)
 
     class Meta:
-        model = UserProfile  # oder User, falls User primär ist
+        model = UserProfile
         fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'user_color', 'type']
 
     def save(self):
@@ -117,13 +113,4 @@ class ContactCreationSerializer(serializers.ModelSerializer):
             type=self.validated_data.get('type', 'user_from_contactbook')
         )
 
-        return user_profile  # Das Objekt zurückgeben, damit die ID enthalten ist
-
-    
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'user_color', 'type', 'initials']
-#         extra_kwargs = {
-#             'email': {'required': False}
-#         }
+        return user_profile

@@ -53,7 +53,6 @@ class CustomLoginView(ObtainAuthToken):
             data = {
                 'token': token.key,
                 'username': user.username,
-                # 'email': user.email
             }
         else:
             data=serializer.errors
@@ -75,6 +74,6 @@ class UserViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        instance = serializer.save()  # Speichert das Objekt und gibt es zurück
+        instance = serializer.save()
         headers = self.get_success_headers(serializer.data)
         return Response(self.get_serializer(instance).data, status=201, headers=headers)
